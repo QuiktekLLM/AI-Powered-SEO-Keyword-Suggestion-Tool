@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered SEO Keyword Suggestion Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 AI-Powered SEO Keyword Tool</h1>
+            <p>Generate smart keyword suggestions with AI-driven SEO insights</p>
+        </div>
+
+        <div class="main-content">
+            <div class="api-setup">
+                <h3>🔑 API Configuration</h3>
+                <div class="input-group">
+                    <label for="apiKey">OpenAI API Key:</label>
+                    <input type="password" id="apiKey" placeholder="sk-..." required>
+                    <small style="color: #6b7280; margin-top: 5px; display: block;">
+                        Your API key is stored locally and never sent to our servers
+                    </small>
+                </div>
+            </div>
+
+            <form id="keywordForm">
+                <div class="input-group">
+                    <label for="business">Business/Product Description:</label>
+                    <textarea id="business" rows="3" placeholder="e.g., Affordable pet grooming services for dogs and cats in downtown area" required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="industry">Industry/Niche:</label>
+                    <select id="industry" required>
+                        <option value="">Select Industry</option>
+                        <option value="pet-care">Pet Care & Grooming</option>
+                        <option value="healthcare">Healthcare & Medical</option>
+                        <option value="fitness">Fitness & Wellness</option>
+                        <option value="food-restaurant">Food & Restaurant</option>
+                        <option value="beauty">Beauty & Cosmetics</option>
+                        <option value="technology">Technology & Software</option>
+                        <option value="real-estate">Real Estate</option>
+                        <option value="education">Education & Training</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="home-garden">Home & Garden</option>
+                        <option value="fashion">Fashion & Apparel</option>
+                        <option value="legal">Legal Services</option>
+                        <option value="finance">Finance & Insurance</option>
+                        <option value="travel">Travel & Tourism</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="location">Target Location (optional):</label>
+                    <input type="text" id="location" placeholder="e.g., New York, Los Angeles, near me">
+                </div>
+
+                <div class="input-group">
+                    <label for="keywordType">Keyword Focus:</label>
+                    <select id="keywordType" required>
+                        <option value="mixed">Mixed (Short & Long-tail)</option>
+                        <option value="short-tail">Short-tail (1-2 words)</option>
+                        <option value="long-tail">Long-tail (3+ words)</option>
+                        <option value="local">Local SEO Focus</option>
+                        <option value="commercial">Commercial Intent</option>
+                        <option value="informational">Informational Content</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn" id="generateBtn">
+                    ✨ Generate AI Keyword Suggestions
+                </button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>AI is analyzing your business and generating smart keyword suggestions...</p>
+            </div>
+
+            <div class="error" id="error" style="display: none;"></div>
+
+            <div class="results" id="results">
+                <div id="keywordResults"></div>
+                
+                <div class="seo-tips" id="seoTips">
+                    <h3>💡 Smart SEO Implementation Tips</h3>
+                    <div id="tipsContent"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; color: #6b7280;">
+                <p>Quick examples to try:</p>
+                <div class="example-keywords">
+                    <span class="example-keyword" onclick="fillExample('pet')">Pet Grooming</span>
+                    <span class="example-keyword" onclick="fillExample('fitness')">Fitness Coach</span>
+                    <span class="example-keyword" onclick="fillExample('restaurant')">Italian Restaurant</span>
+                    <span class="example-keyword" onclick="fillExample('dentist')">Dental Clinic</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="scripts.js"></script>
+</html>
