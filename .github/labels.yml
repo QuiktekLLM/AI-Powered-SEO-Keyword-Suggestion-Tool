@@ -1,0 +1,127 @@
+# Labels for AI-Powered SEO Keyword Suggestion Tool
+
+# Issue Types
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: "improvement"
+  color: "1d76db"
+  description: "Enhancement to existing functionality"
+
+- name: "question"
+  color: "d876e3"
+  description: "Further information is requested"
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+# Priority Levels
+- name: "priority: low"
+  color: "c2e0c6"
+  description: "Low priority issue"
+
+- name: "priority: medium"
+  color: "fbca04"
+  description: "Medium priority issue"
+
+- name: "priority: high"
+  color: "ff9500"
+  description: "High priority issue"
+
+- name: "priority: critical"
+  color: "b60205"
+  description: "Critical issue that needs immediate attention"
+
+# Status Labels
+- name: "needs-triage"
+  color: "ededed"
+  description: "Issue needs to be reviewed and categorized"
+
+- name: "needs-response"
+  color: "fef2c0"
+  description: "Waiting for response from issue author"
+
+- name: "in-progress"
+  color: "0052cc"
+  description: "Currently being worked on"
+
+- name: "ready-for-review"
+  color: "7057ff"
+  description: "Ready for code review"
+
+- name: "blocked"
+  color: "5319e7"
+  description: "Progress blocked by external dependency"
+
+# Component Labels
+- name: "component: frontend"
+  color: "0e8a16"
+  description: "Related to HTML, CSS, or JavaScript"
+
+- name: "component: backend"
+  color: "1d76db"
+  description: "Related to Cloudflare Worker or API"
+
+- name: "component: ai"
+  color: "ff6347"
+  description: "Related to AI keyword generation"
+
+- name: "component: ui/ux"
+  color: "c5def5"
+  description: "Related to user interface or user experience"
+
+- name: "component: docs"
+  color: "0075ca"
+  description: "Related to documentation"
+
+# Browser/Platform Labels
+- name: "browser: chrome"
+  color: "e99695"
+  description: "Issue specific to Chrome browser"
+
+- name: "browser: firefox"
+  color: "e99695"
+  description: "Issue specific to Firefox browser"
+
+- name: "browser: safari"
+  color: "e99695"
+  description: "Issue specific to Safari browser"
+
+- name: "browser: edge"
+  color: "e99695"
+  description: "Issue specific to Microsoft Edge browser"
+
+- name: "platform: mobile"
+  color: "f9d0c4"
+  description: "Issue specific to mobile devices"
+
+- name: "platform: desktop"
+  color: "f9d0c4"
+  description: "Issue specific to desktop devices"
+
+# Special Labels
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+- name: "wontfix"
+  color: "ffffff"
+  description: "This will not be worked on"
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "This issue or pull request already exists"
+
+- name: "invalid"
+  color: "e4e669"
+  description: "This doesn't seem right"

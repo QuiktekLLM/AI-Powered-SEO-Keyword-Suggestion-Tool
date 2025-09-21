@@ -1,0 +1,103 @@
+name: Improvement/Enhancement
+description: Suggest an improvement to existing functionality
+title: "[Enhancement]: "
+labels: ["improvement", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement! Please help us understand what could be made better.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-submission Checklist
+      description: Please check the following before submitting your enhancement suggestion
+      options:
+        - label: I have searched existing issues to make sure this hasn't been suggested before
+          required: true
+        - label: This improvement relates to existing functionality, not entirely new features
+          required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area of Improvement
+      description: What area of the tool needs improvement?
+      options:
+        - Keyword Generation Quality
+        - User Interface/Design
+        - Performance/Speed
+        - Error Handling
+        - Documentation
+        - Accessibility
+        - Mobile Experience
+        - SEO Analysis Accuracy
+        - Data Presentation
+        - Form Usability
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current Behavior
+      description: Describe how the feature currently works
+      placeholder: What is the current behavior that could be improved?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-improvement
+    attributes:
+      label: Proposed Improvement
+      description: Describe the improvement you'd like to see
+      placeholder: How should this feature work instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits
+      description: What benefits would this improvement provide?
+      placeholder: |
+        - Better user experience because...
+        - Improved accuracy because...
+        - Faster performance because...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact Level
+      description: How much would this improvement help users?
+      options:
+        - Low - Minor convenience
+        - Medium - Noticeable improvement
+        - High - Significant user benefit
+        - Critical - Major usability issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      description: Provide specific examples of the current vs improved behavior
+      placeholder: |
+        Current: When I enter "dog grooming", the tool generates...
+        Improved: When I enter "dog grooming", the tool should instead...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the improvement, including screenshots if helpful
+    validations:
+      required: false
