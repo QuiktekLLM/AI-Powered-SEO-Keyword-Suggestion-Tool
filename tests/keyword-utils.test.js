@@ -195,7 +195,7 @@ describe('generateKeywordsByType', () => {
       expect(keyword).toHaveProperty('intent');
       expect(typeof keyword.keyword).toBe('string');
       expect(typeof keyword.search_volume).toBe('string');
-      expect(['easy', 'medium', 'hard']).toContain(keyword.competition);
+      expect(['easy', 'medium', 'hard', 'high']).toContain(keyword.competition);
       // Allow for different intent types as the logic might vary
       expect(['commercial', 'informational', 'local', 'navigational']).toContain(keyword.intent);
     });

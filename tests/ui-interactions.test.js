@@ -18,12 +18,28 @@ describe('Form Validation and Input Processing', () => {
     
     const industrySelect = document.createElement('select');
     industrySelect.id = 'industry';
+    // Add options to make select functional
+    const industryOptions = ['pet-care', 'fitness', 'healthcare', 'food-restaurant'];
+    industryOptions.forEach(value => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = value;
+      industrySelect.appendChild(option);
+    });
     
     const locationInput = document.createElement('input');
     locationInput.id = 'location';
     
     const keywordTypeSelect = document.createElement('select');
     keywordTypeSelect.id = 'keywordType';
+    // Add options to make select functional
+    const keywordTypeOptions = ['local', 'commercial', 'mixed', 'informational'];
+    keywordTypeOptions.forEach(value => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = value;
+      keywordTypeSelect.appendChild(option);
+    });
     
     document.body.appendChild(form);
     document.body.appendChild(businessInput);
@@ -83,12 +99,28 @@ describe('Example Data Functions', () => {
     
     const industrySelect = document.createElement('select');
     industrySelect.id = 'industry';
+    // Add options to make select functional
+    const industryOptions = ['pet-care', 'fitness', 'healthcare', 'food-restaurant'];
+    industryOptions.forEach(value => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = value;
+      industrySelect.appendChild(option);
+    });
     
     const locationInput = document.createElement('input');
     locationInput.id = 'location';
     
     const keywordTypeSelect = document.createElement('select');
     keywordTypeSelect.id = 'keywordType';
+    // Add options to make select functional
+    const keywordTypeOptions = ['local', 'commercial', 'mixed', 'informational'];
+    keywordTypeOptions.forEach(value => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = value;
+      keywordTypeSelect.appendChild(option);
+    });
     
     document.body.appendChild(businessInput);
     document.body.appendChild(industrySelect);
