@@ -1,0 +1,150 @@
+name: Dependency Check
+
+on:
+  # Run on pull requests
+  pull_request:
+    branches: [ main, master ]
+  
+  # Run on push to main/master
+  push:
+    branches: [ main, master ]
+  
+  # Run weekly on Mondays at 9 AM UTC
+  schedule:
+    - cron: '0 9 * * 1'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  dependency-check:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run security audit
+        run: |
+          echo "## Security Audit Results" >> $GITHUB_STEP_SUMMARY
+          npm audit --audit-level moderate || {
+            echo "❌ Security vulnerabilities found!" >> $GITHUB_STEP_SUMMARY
+            echo "Run 'npm audit fix' to address automatically fixable issues." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
+          echo "✅ No security vulnerabilities found!" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check for outdated dependencies
+        run: |
+          echo "## Dependency Update Check" >> $GITHUB_STEP_SUMMARY
+          npx npm-check-updates --errorLevel 2 || {
+            echo "📦 Outdated dependencies found!" >> $GITHUB_STEP_SUMMARY
+            echo "### Outdated Dependencies:" >> $GITHUB_STEP_SUMMARY
+            npx npm-check-updates >> $GITHUB_STEP_SUMMARY || true
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Consider updating dependencies to their latest versions." >> $GITHUB_STEP_SUMMARY
+          }
+      
+      - name: Run tests after dependency check
+        run: npm test
+        
+      - name: Generate dependency report
+        if: always()
+        run: |
+          echo "## Full Dependency Report" >> $GITHUB_STEP_SUMMARY
+          echo "### Current Dependencies:" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          npm list --depth=0 --json | jq '.dependencies' >> $GITHUB_STEP_SUMMARY || npm list --depth=0 >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Package Info:" >> $GITHUB_STEP_SUMMARY
+          echo "- Node.js version: $(node --version)" >> $GITHUB_STEP_SUMMARY
+          echo "- NPM version: $(npm --version)" >> $GITHUB_STEP_SUMMARY
+          echo "- Package count: $(npm list --depth=0 --parseable | wc -l)" >> $GITHUB_STEP_SUMMARY
+
+  dependency-update:
+    name: Create Dependency Update PR
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    needs: dependency-check
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Check for updates
+        id: check-updates
+        run: |
+          if npx npm-check-updates --errorLevel 2 > /dev/null 2>&1; then
+            echo "has-updates=false" >> $GITHUB_OUTPUT
+          else
+            echo "has-updates=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Update dependencies
+        if: steps.check-updates.outputs.has-updates == 'true'
+        run: |
+          # Create a new branch for dependency updates
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          BRANCH_NAME="dependency-updates-$(date +%Y-%m-%d)"
+          git checkout -b "$BRANCH_NAME"
+          
+          # Update dependencies
+          npx npm-check-updates -u
+          npm install
+          
+          # Run tests to ensure updates don't break anything
+          npm test
+          
+          # Commit changes
+          git add package.json package-lock.json
+          git commit -m "chore: update dependencies to latest versions
+
+          - Updated dependencies using npm-check-updates
+          - All tests passing after updates
+          - Automated update from dependency-check workflow"
+          
+          # Push branch
+          git push origin "$BRANCH_NAME"
+          
+          # Create pull request using GitHub CLI
+          gh pr create \
+            --title "chore: update dependencies $(date +%Y-%m-%d)" \
+            --body "This is an automated pull request to update dependencies to their latest versions.
+
+          ## Changes
+          - Updated dependencies using \`npm-check-updates\`
+          - All existing tests are passing
+          - Security audit passed
+
+          ## Review Notes
+          Please review the changes and ensure all functionality works as expected before merging.
+
+          Created by the dependency-check workflow." \
+            --head "$BRANCH_NAME" \
+            --base main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
