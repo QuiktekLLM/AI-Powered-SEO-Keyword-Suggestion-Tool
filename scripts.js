@@ -42,30 +42,25 @@ document.addEventListener('DOMContentLoaded', function () {
   if (form) {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const apiKeyEl = document.getElementById('apiKey');
-      const apiKey = apiKeyEl ? apiKeyEl.value.trim() : '';
-      if (!apiKey) { showError('Please enter your OpenAI API key'); return; }
 
       const business = (document.getElementById('business') || {}).value;
       const industry = (document.getElementById('industry') || {}).value;
       const location = (document.getElementById('location') || {}).value;
       const keywordType = (document.getElementById('keywordType') || {}).value;
 
+      if (!business || !industry || !keywordType) {
+        showError('Please fill in all required fields');
+        return;
+      }
+
       showLoading(true); hideError();
       try {
-        const keywords = await generateKeywords(apiKey, business, industry, location, keywordType);
+        const keywords = await generateKeywords(business, industry, location, keywordType);
         displayResults(keywords);
       } catch (err) {
         showError('Error generating keywords: ' + (err.message || err)); console.error(err);
       } finally { showLoading(false); }
     });
-  }
-
-  // API key input behaviour
-  const apiEl = document.getElementById('apiKey');
-  if (apiEl) {
-    apiEl.addEventListener('input', function () { setTimeout(() => { this.type = 'password'; }, 2000); });
-    apiEl.addEventListener('focus', function () { this.type = 'text'; });
   }
 
   // Delegate clicks on keyword items for copy behaviour
@@ -87,22 +82,52 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-async function generateKeywords(apiKey, business, industry, location, keywordType) {
+async function generateKeywords(business, industry, location, keywordType) {
   const prompt = createPrompt(business, industry, location, keywordType);
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({ model: 'gpt-3.5-turbo', messages: [{ role: 'system', content: 'You are an expert SEO specialist who generates keyword suggestions with search volume estimates, competition analysis, and implementation guidance. Always respond with valid JSON format.' }, { role: 'user', content: prompt }], max_tokens: 2000, temperature: 0.7 })
+  
+  // Call Cloudflare AI function endpoint
+  // This endpoint should be set up to handle AI keyword generation
+  const cloudflareEndpoint = '/api/generate-keywords'; // Adjust URL as needed
+  
+  const response = await fetch(cloudflareEndpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      prompt: prompt,
+      business: business,
+      industry: industry,
+      location: location,
+      keywordType: keywordType
+    })
   });
 
   if (!response.ok) {
-    let err = 'API request failed';
-    try { const errorData = await response.json(); err = errorData.error?.message || err; } catch (e) {}
+    let err = 'AI service request failed';
+    try { 
+      const errorData = await response.json(); 
+      err = errorData.error?.message || errorData.message || err; 
+    } catch (e) {}
     throw new Error(err);
   }
 
   const data = await response.json();
-  const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-  try { return JSON.parse(content); } catch (e) { console.log('Raw response:', content); throw new Error('Invalid JSON response from AI'); }
+  
+  // Handle different response formats from Cloudflare AI
+  if (data.result && typeof data.result === 'object') {
+    return data.result;
+  } else if (data.response && typeof data.response === 'string') {
+    try { 
+      return JSON.parse(data.response); 
+    } catch (e) { 
+      console.log('Raw AI response:', data.response); 
+      throw new Error('Invalid JSON response from AI service'); 
+    }
+  } else if (typeof data === 'object' && data.primary_keywords) {
+    return data;
+  } else {
+    console.log('Unexpected response format:', data);
+    throw new Error('Unexpected response format from AI service');
+  }
 }
 
 function createPrompt(business, industry, location, keywordType) {
