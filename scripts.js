@@ -186,51 +186,77 @@ async function generateKeywordsLocally(business, industry, location, keywordType
   };
 }
 
-// Use utility function from keyword-utils.js
-const createPrompt = window.KeywordUtils?.createPrompt || function(business, industry, location, keywordType) {
+// Use utility function from keyword-utils.js or provide fallback
+function createPrompt(business, industry, location, keywordType) {
+  if (window.KeywordUtils?.createPrompt) {
+    return window.KeywordUtils.createPrompt(business, industry, location, keywordType);
+  }
+  // Fallback implementation
   return `Generate SEO keyword suggestions for this business: "${business}"\n\nIndustry: ${industry}\nLocation: ${location || 'Not specified'}\nKeyword Type Focus: ${keywordType}\n\nPlease provide a JSON response with this exact structure:\n{\n  "primary_keywords": [ { "keyword": "keyword phrase", "search_volume": "estimated monthly searches", "competition": "easy|medium|hard", "intent": "commercial|informational|navigational" } ],\n  "long_tail_keywords": [ { "keyword": "longer keyword phrase", "search_volume": "estimated monthly searches", "competition": "easy|medium|hard", "intent": "commercial|informational|navigational" } ],\n  "local_keywords": [ { "keyword": "local keyword phrase", "search_volume": "estimated monthly searches", "competition": "easy|medium|hard", "intent": "commercial|informational|navigational" } ],\n  "content_ideas": [ { "keyword": "content-focused keyword", "search_volume": "estimated monthly searches", "competition": "easy|medium|hard", "intent": "informational" } ],\n  "seo_tips": [ { "tip": "specific implementation advice", "keyword_example": "example keyword to use", "placement": "where to use it (title, meta, content, etc.)" } ]\n}\n\nGenerate 4-6 keywords per category. Focus on relevant, actionable keywords with realistic search volumes.`;
-};
+}
 
-// Use utility functions from keyword-utils.js
-const extractKeyTerms = window.KeywordUtils?.extractKeyTerms || function(business) {
+// Use utility functions from keyword-utils.js or provide fallbacks
+function extractKeyTerms(business) {
+  if (window.KeywordUtils?.extractKeyTerms) {
+    return window.KeywordUtils.extractKeyTerms(business);
+  }
+  // Fallback implementation
   const commonWords = ['a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might', 'can', 'their', 'there', 'they', 'them', 'these', 'those', 'this', 'that'];
   return business.toLowerCase()
     .replace(/[^\w\s]/g, ' ')
     .split(/\s+/)
     .filter(word => word.length > 2 && !commonWords.includes(word))
     .slice(0, 5);
-};
+}
 
-const getIndustryKeywords = window.KeywordUtils?.getIndustryKeywords || function(industry) {
+function getIndustryKeywords(industry) {
+  if (window.KeywordUtils?.getIndustryKeywords) {
+    return window.KeywordUtils.getIndustryKeywords(industry);
+  }
   // Fallback for when KeywordUtils is not available
   return {
     services: ['service', 'consultation', 'solution', 'support', 'maintenance'],
     adjectives: ['professional', 'experienced', 'reliable', 'quality', 'affordable'],
     terms: ['business', 'service', 'company', 'professional', 'expert']
   };
-};
+}
 
-const generateKeywordsByType = window.KeywordUtils?.generateKeywordsByType || function() {
+function generateKeywordsByType(businessWords, industryData, location, keywordType) {
+  if (window.KeywordUtils?.generateKeywordsByType) {
+    return window.KeywordUtils.generateKeywordsByType(businessWords, industryData, location, keywordType);
+  }
   return { primary: [], longTail: [], local: [], content: [] };
-};
+}
 
-const generateSEOTips = window.KeywordUtils?.generateSEOTips || function() {
+function generateSEOTips(businessWords, industryData, location) {
+  if (window.KeywordUtils?.generateSEOTips) {
+    return window.KeywordUtils.generateSEOTips(businessWords, industryData, location);
+  }
   return [];
-};
+}
 
-const randomVolume = window.KeywordUtils?.randomVolume || function(min, max) {
+function randomVolume(min, max) {
+  if (window.KeywordUtils?.randomVolume) {
+    return window.KeywordUtils.randomVolume(min, max);
+  }
   const volume = Math.floor(Math.random() * (max - min + 1)) + min;
   return volume >= 1000 ? `${(volume / 1000).toFixed(1)}k` : volume.toString();
-};
+}
 
-const randomDifficulty = window.KeywordUtils?.randomDifficulty || function() {
+function randomDifficulty() {
+  if (window.KeywordUtils?.randomDifficulty) {
+    return window.KeywordUtils.randomDifficulty();
+  }
   const difficulties = ['easy', 'medium', 'hard'];
   return difficulties[Math.floor(Math.random() * difficulties.length)];
-};
+}
 
-const escapeHtml = window.KeywordUtils?.escapeHtml || function(str) {
+function escapeHtml(str) {
+  if (window.KeywordUtils?.escapeHtml) {
+    return window.KeywordUtils.escapeHtml(str);
+  }
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-};
+}
 
 function displayResults(data) {
   const resultsDiv = getCachedElement('results');
