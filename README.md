@@ -225,28 +225,37 @@ Use the example buttons to quickly test the tool:
 
 ## 🤝 Contributing
 
-We welcome contributions to improve this tool! Here's how you can help:
+We welcome contributions from the community! Whether you want to report a bug, suggest a feature, or contribute code, we'd love your help.
 
-### Ways to Contribute
-1. **Bug Reports**: Open an issue describing the problem
-2. **Feature Requests**: Suggest new features or improvements
-3. **Code Contributions**: Submit pull requests with enhancements
-4. **Documentation**: Help improve documentation and examples
-5. **Testing**: Test the tool with different use cases and report issues
+### 🐛 Reporting Issues
 
-### Development Setup
-1. Fork the repository
-2. Clone your fork locally
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+Found a bug or have a suggestion? Please use our issue templates:
 
-### Code Style Guidelines
-- Use consistent indentation (2 spaces)
-- Include comments for complex logic
-- Follow semantic HTML practices
-- Ensure accessibility compliance
-- Test on multiple browsers
+- **[🐛 Bug Report](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues/new?template=bug_report.yml)** - Report bugs or issues
+- **[✨ Feature Request](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues/new?template=feature_request.yml)** - Suggest new features  
+- **[🔧 Enhancement](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues/new?template=enhancement.yml)** - Propose improvements
+- **[❓ Question](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues/new?template=question.yml)** - Ask questions about usage
+
+### 💻 Contributing Code
+
+Ready to contribute code? Great! Please:
+
+1. **Read our [Contributing Guide](CONTRIBUTING.md)** for detailed guidelines
+2. **Fork the repository** and create a feature branch
+3. **Follow our code style** and test your changes thoroughly
+4. **Submit a pull request** with a clear description
+
+### 🏷️ Issue Labels
+
+We use labels to organize issues effectively:
+- `bug` - Something isn't working
+- `enhancement` - New feature requests  
+- `improvement` - Enhancements to existing features
+- `question` - Questions about usage
+- `good first issue` - Perfect for new contributors
+- `help wanted` - Issues that need community help
+
+For a complete list of labels and their meanings, see our [labels guide](.github/labels.yml).
 
 ## 📄 License
 
@@ -279,10 +288,13 @@ This project is open source and available under the [MIT License](LICENSE).
 ### Getting Help
 
 If you encounter issues not covered here:
-1. Check the [Issues](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues) page
-2. Search for existing solutions
-3. Create a new issue with detailed information
-4. Include browser version, error messages, and steps to reproduce
+
+1. **Check our [Issues page](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues)** for existing solutions
+2. **Search existing issues** to see if your problem has been reported
+3. **Create a new issue** using the appropriate template:
+   - [🐛 Bug Report](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues/new?template=bug_report.yml) for technical issues
+   - [❓ Question](https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool/issues/new?template=question.yml) for usage questions
+4. **Include detailed information**: Browser version, error messages, steps to reproduce, and any relevant screenshots
 
 ## 📞 Support
 

@@ -1,0 +1,83 @@
+name: Question/Support
+description: Ask a question about using the AI-Powered SEO Keyword Tool
+title: "[Question]: "
+labels: ["question", "needs-response"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about using the tool? We're here to help! Please check the documentation first, but if you can't find the answer, we'd be happy to assist.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-submission Checklist
+      description: Please check the following before asking your question
+      options:
+        - label: I have read the README documentation
+          required: true
+        - label: I have searched existing issues to see if my question has been answered
+          required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What would you like to know?
+      placeholder: Please describe your question in detail
+    validations:
+      required: true
+
+  - type: dropdown
+    id: question-category
+    attributes:
+      label: Question Category
+      description: What is your question about?
+      options:
+        - Setup/Installation
+        - How to Use
+        - Keyword Generation
+        - Cloudflare Worker Configuration
+        - Browser Compatibility
+        - Performance Issues
+        - SEO Best Practices
+        - Technical Implementation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-tried
+    attributes:
+      label: What have you tried?
+      description: What steps have you already taken to solve this?
+      placeholder: Describe what you've already tried
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected Outcome
+      description: What are you trying to achieve?
+      placeholder: What result are you hoping for?
+    validations:
+      required: false
+
+  - type: input
+    id: browser-info
+    attributes:
+      label: Browser and Version
+      description: What browser and version are you using?
+      placeholder: "Example: Chrome 118.0.5993.88"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any additional information that might help us answer your question
+    validations:
+      required: false
