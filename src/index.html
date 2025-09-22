@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered SEO Keyword Suggestion Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header" role="banner">
+            <h1>AI-Powered SEO Keyword Tool</h1>
+            <p class="lead">Generate smart keyword suggestions with AI-driven SEO insights</p>
+        </header>
+
+        <main class="main-content" role="main">
+            <section aria-labelledby="form-heading">
+                <h2 id="form-heading" class="sr-only">Generate Keyword Suggestions</h2>
+                <form id="keywordForm">
+                    <div class="input-group">
+                        <label for="business">Business / Product Description</label>
+                        <textarea id="business" rows="3" placeholder="e.g., Affordable pet grooming services for dogs and cats in downtown area" required></textarea>
+                    </div>
+
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="industry">Industry / Niche</label>
+                            <select id="industry" required>
+                                <option value="">Select Industry</option>
+                                <option value="pet-care">Pet Care & Grooming</option>
+                                <option value="healthcare">Healthcare & Medical</option>
+                                <option value="fitness">Fitness & Wellness</option>
+                                <option value="food-restaurant">Food & Restaurant</option>
+                                <option value="beauty">Beauty & Cosmetics</option>
+                                <option value="technology">Technology & Software</option>
+                                <option value="real-estate">Real Estate</option>
+                                <option value="education">Education & Training</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="home-garden">Home & Garden</option>
+                                <option value="fashion">Fashion & Apparel</option>
+                                <option value="legal">Legal Services</option>
+                                <option value="finance">Finance & Insurance</option>
+                                <option value="travel">Travel & Tourism</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="location">Target Location (optional)</label>
+                            <input type="text" id="location" placeholder="e.g., New York, Los Angeles, near me">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="keywordType">Keyword Focus</label>
+                            <select id="keywordType" required>
+                                <option value="mixed">Mixed (Short & Long-tail)</option>
+                                <option value="short-tail">Short-tail (1-2 words)</option>
+                                <option value="long-tail">Long-tail (3+ words)</option>
+                                <option value="local">Local SEO Focus</option>
+                                <option value="commercial">Commercial Intent</option>
+                                <option value="informational">Informational Content</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn" id="generateBtn">Generate AI Keyword Suggestions</button>
+                </form>
+            </section>
+
+            <div class="loading" id="loading" aria-live="polite" hidden>
+                <div class="spinner" aria-hidden="true"></div>
+                <p>AI is analyzing your business and generating smart keyword suggestions...</p>
+            </div>
+
+            <div class="error" id="error" style="display: none;" role="alert"></div>
+
+            <section class="results" id="results" aria-live="polite" hidden>
+                <div id="keywordResults"></div>
+
+                <aside class="seo-tips" id="seoTips" aria-labelledby="seo-tips-heading">
+                    <h2 id="seo-tips-heading">Smart SEO Implementation Tips</h2>
+                    <div id="tipsContent"></div>
+                </aside>
+            </section>
+
+            <div class="examples">
+                <p class="muted">Quick examples to try:</p>
+                <div class="example-keywords">
+                    <button type="button" class="example-keyword" onclick="fillExample('pet')">Pet Grooming</button>
+                    <button type="button" class="example-keyword" onclick="fillExample('fitness')">Fitness Coach</button>
+                    <button type="button" class="example-keyword" onclick="fillExample('restaurant')">Italian Restaurant</button>
+                    <button type="button" class="example-keyword" onclick="fillExample('dentist')">Dental Clinic</button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="site-footer" role="contentinfo">
+            <p class="muted">Built with care — powered by AI for intelligent keyword suggestions.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts will be injected by Webpack -->
+</body>
+</html>

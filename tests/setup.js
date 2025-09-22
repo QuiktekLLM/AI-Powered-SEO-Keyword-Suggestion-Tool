@@ -5,6 +5,10 @@
 global.fetch = jest.fn();
 
 // Mock navigator.clipboard
+if (typeof navigator === 'undefined') {
+  global.navigator = {};
+}
+
 Object.assign(global.navigator, {
   clipboard: {
     writeText: jest.fn(() => Promise.resolve())
@@ -12,7 +16,9 @@ Object.assign(global.navigator, {
 });
 
 // Mock document methods
-global.document.execCommand = jest.fn(() => true);
+if (typeof document !== 'undefined') {
+  global.document.execCommand = jest.fn(() => true);
+}
 
 // Create mock DOM elements
 const createMockElement = (id, tagName = 'div') => {
