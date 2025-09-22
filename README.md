@@ -223,6 +223,16 @@ Use the example buttons to quickly test the tool:
 - Optimized for cost-effective and scalable AI processing
 - No API keys required from users
 
+### CI/CD Pipeline
+- **Automated Testing**: Jest-based test suite with comprehensive coverage
+- **Dependency Security**: Automated security audits using `npm audit`
+- **Dependency Updates**: Automated dependency checking with `npm-check-updates`
+- **Scheduled Scans**: Weekly dependency scans every Monday
+- **Auto-Updates**: Automated pull requests for dependency updates
+- **Continuous Integration**: Tests run on every push and pull request
+
+For detailed information about the dependency check workflow, see the [Dependency Check Workflow Documentation](docs/dependency-check-workflow.md).
+
 ## 🤝 Contributing
 
 We welcome contributions from the community! Whether you want to report a bug, suggest a feature, or contribute code, we'd love your help.
