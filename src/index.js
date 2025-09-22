@@ -12,10 +12,73 @@ function getCachedElement(id) {
   return cachedElements[id];
 }
 
+// Settings and API Key management
+class SettingsManager {
+  constructor() {
+    this.storageKey = 'seo-tool-settings';
+    this.settings = this.loadSettings();
+  }
+
+  loadSettings() {
+    try {
+      const stored = localStorage.getItem(this.storageKey);
+      return stored ? JSON.parse(stored) : { apiKey: '' };
+    } catch (error) {
+      console.warn('Failed to load settings from localStorage:', error);
+      return { apiKey: '' };
+    }
+  }
+
+  saveSettings(settings) {
+    try {
+      this.settings = { ...this.settings, ...settings };
+      localStorage.setItem(this.storageKey, JSON.stringify(this.settings));
+      return true;
+    } catch (error) {
+      console.warn('Failed to save settings to localStorage:', error);
+      return false;
+    }
+  }
+
+  clearSettings() {
+    try {
+      localStorage.removeItem(this.storageKey);
+      this.settings = { apiKey: '' };
+      return true;
+    } catch (error) {
+      console.warn('Failed to clear settings from localStorage:', error);
+      return false;
+    }
+  }
+
+  getApiKey() {
+    return this.settings.apiKey || '';
+  }
+
+  hasApiKey() {
+    return this.settings.apiKey && this.settings.apiKey.length > 0;
+  }
+}
+
+const settingsManager = new SettingsManager();
+
 // Cloudflare Worker endpoint - update this with your deployed worker URL
 const cloudflareEndpoint = 'https://your-worker.your-subdomain.workers.dev/api/generate-keywords';
 
 async function generateKeywords(business, industry, location, keywordType) {
+  // Check if user has provided their own API key
+  const userApiKey = settingsManager.getApiKey();
+  
+  if (userApiKey) {
+    try {
+      return await generateWithUserApiKey(business, industry, location, keywordType, userApiKey);
+    } catch (error) {
+      console.warn('User API key generation failed, falling back to default service:', error);
+      // Fall through to default service
+    }
+  }
+
+  // Default behavior - use Cloudflare worker or local generation
   const requestData = {
     business,
     industry,
@@ -54,6 +117,12 @@ async function generateKeywords(business, industry, location, keywordType) {
     console.log('Falling back to local keyword generation...');
     return await KeywordUtils.generateKeywordsLocally(business, industry, location, keywordType);
   }
+}
+
+async function generateWithUserApiKey(business, industry, location, keywordType, apiKey) {
+  // This would be the function to call OpenAI API directly with user's key
+  // For now, we'll throw an error to indicate this isn't implemented yet
+  throw new Error('Direct OpenAI API integration not yet implemented. Using default service.');
 }
 
 async function generateKeywordsLocally(business, industry, location, keywordType) {
@@ -229,16 +298,20 @@ function copyKeywordText(text, el) {
 
 function showLoading(show) {
   const loadingEl = getCachedElement('loading');
-  const submitBtn = getCachedElement('submitBtn');
+  const submitBtn = getCachedElement('generateBtn'); // Fixed: changed from submitBtn to generateBtn
   
   if (show) {
-    loadingEl.style.display = 'block';
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Generating Keywords...';
+    if (loadingEl) loadingEl.style.display = 'block';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Generating Keywords...';
+    }
   } else {
-    loadingEl.style.display = 'none';
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Generate AI Keyword Suggestions';
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Generate AI Keyword Suggestions';
+    }
   }
 }
 
@@ -303,6 +376,9 @@ window.copyKeywordText = copyKeywordText;
 
 // DOM ready handlers and event delegation
 document.addEventListener('DOMContentLoaded', function () {
+  // Initialize settings UI
+  initializeSettings();
+  
   const form = getCachedElement('keywordForm');
   if (form) {
     form.addEventListener('submit', async function (e) {
@@ -334,3 +410,84 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+function initializeSettings() {
+  const settingsToggle = getCachedElement('settingsToggle');
+  const settingsPanel = getCachedElement('settingsPanel');
+  const apiKeyInput = getCachedElement('apiKey');
+  const saveSettings = getCachedElement('saveSettings');
+  const clearSettings = getCachedElement('clearSettings');
+
+  // Load saved API key
+  if (apiKeyInput) {
+    apiKeyInput.value = settingsManager.getApiKey();
+  }
+
+  // Toggle settings panel
+  if (settingsToggle && settingsPanel) {
+    settingsToggle.addEventListener('click', function() {
+      const isExpanded = settingsToggle.getAttribute('aria-expanded') === 'true';
+      settingsToggle.setAttribute('aria-expanded', !isExpanded);
+      settingsPanel.hidden = isExpanded;
+    });
+  }
+
+  // Save settings
+  if (saveSettings && apiKeyInput) {
+    saveSettings.addEventListener('click', function() {
+      const apiKey = apiKeyInput.value.trim();
+      const success = settingsManager.saveSettings({ apiKey });
+      
+      if (success) {
+        showTemporaryMessage('Settings saved successfully!', 'success');
+      } else {
+        showTemporaryMessage('Failed to save settings.', 'error');
+      }
+    });
+  }
+
+  // Clear settings
+  if (clearSettings && apiKeyInput) {
+    clearSettings.addEventListener('click', function() {
+      if (confirm('Are you sure you want to clear all settings?')) {
+        const success = settingsManager.clearSettings();
+        if (success) {
+          apiKeyInput.value = '';
+          showTemporaryMessage('Settings cleared successfully!', 'success');
+        } else {
+          showTemporaryMessage('Failed to clear settings.', 'error');
+        }
+      }
+    });
+  }
+}
+
+function showTemporaryMessage(message, type = 'info') {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `temp-message ${type}`;
+  messageDiv.textContent = message;
+  messageDiv.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 1000;
+    animation: slideInRight 0.3s ease;
+    ${type === 'success' ? 'background: #10b981; color: white;' : 
+      type === 'error' ? 'background: #ef4444; color: white;' : 
+      'background: #3b82f6; color: white;'}
+  `;
+  
+  document.body.appendChild(messageDiv);
+  
+  setTimeout(() => {
+    messageDiv.style.animation = 'slideOutRight 0.3s ease';
+    setTimeout(() => {
+      if (messageDiv.parentNode) {
+        messageDiv.parentNode.removeChild(messageDiv);
+      }
+    }, 300);
+  }, 3000);
+}
