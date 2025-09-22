@@ -86,37 +86,50 @@ Before using this tool, you'll need:
 
 ### Step 2: Deploy the Frontend
 
-**Option 1: Static Hosting (Recommended)**
-Upload the files to any static hosting service:
-- **Cloudflare Pages**: Connect your GitHub repository for automatic deployments
-- **Netlify**: Drag and drop the files or connect via Git
-- **Vercel**: Import the project from GitHub
-- **GitHub Pages**: Enable Pages in your repository settings
-
-**Option 2: Local Development**
+**Option 1: Production Build (Recommended)**
 1. **Clone or Download** this repository:
    ```bash
    git clone https://github.com/kedster/AI-Powered-SEO-Keyword-Suggestion-Tool.git
    cd AI-Powered-SEO-Keyword-Suggestion-Tool
    ```
 
-2. **Serve the files** using any local web server:
-   
-   **Using Python (Python 3):**
+2. **Install dependencies**:
    ```bash
-   python -m http.server 8080
+   npm install
    ```
-   
-   **Using Node.js:**
+
+3. **Build the optimized production version**:
    ```bash
+   npm run build
+   ```
+
+4. **Deploy the `dist/` folder** to any static hosting service:
+   - **Cloudflare Pages**: Connect your GitHub repository for automatic deployments
+   - **Netlify**: Drag and drop the `dist/` folder or connect via Git
+   - **Vercel**: Import the project from GitHub
+   - **GitHub Pages**: Enable Pages and deploy the `dist/` folder
+
+**Option 2: Development Server**
+1. **Start the development server** with hot module replacement:
+   ```bash
+   npm run dev
+   ```
+
+2. **Open your browser** and navigate to `http://localhost:8080`
+
+**Option 3: Legacy/Simple Deployment**
+For simple deployments without the build system, you can still use the root files:
+   ```bash
+   # Using Python (Python 3)
+   python -m http.server 8080
+   
+   # Using Node.js
    npx serve .
    ```
 
-3. **Open your browser** and navigate to `http://localhost:8080`
-
 ### Step 3: Configuration
 
-Update the Cloudflare Worker endpoint in `scripts.js`:
+Update the Cloudflare Worker endpoint in `src/index.js`:
 ```javascript
 const cloudflareEndpoint = 'https://your-worker.your-subdomain.workers.dev/api/generate-keywords';
 ```
@@ -204,11 +217,38 @@ Use the example buttons to quickly test the tool:
 ## 🔧 Technical Details
 
 ### Technology Stack
-- **Frontend**: Pure HTML5, CSS3, and JavaScript (ES6+)
+- **Frontend**: Pure HTML5, CSS3, and JavaScript (ES6+) with modern build system
+- **Build System**: Webpack 5 with comprehensive optimization
 - **Backend**: Cloudflare Workers with AI integration
 - **AI Processing**: Cloudflare Workers AI (Llama 2 model)
 - **Styling**: Custom CSS with CSS Grid and Flexbox
-- **No Dependencies**: No external libraries or frameworks required for the frontend
+- **Bundling**: Tree-shaking, code splitting, and minification for optimal performance
+
+### Build System Features
+- **Webpack 5**: Modern bundling with optimization
+- **Tree Shaking**: Dead code elimination
+- **Code Splitting**: Vendor and utility chunk separation
+- **Minification**: JavaScript and CSS compression
+- **Hot Module Replacement**: Development server with live reload
+- **Source Maps**: Production debugging support
+- **Content Hashing**: Browser cache optimization
+
+For detailed build system documentation, see [Build System Documentation](docs/BUILD_SYSTEM.md).
+
+### Performance Optimizations
+- **Bundle Size**: ~82KB total (down from 150KB+ unoptimized)
+- **Efficient Caching**: Content hashes enable long-term browser caching
+- **Optimized Loading**: Chunked assets for better performance
+- **Modern JavaScript**: ES6+ with Babel transpilation and polyfills
+
+### Development Scripts
+```bash
+npm run dev          # Development server with HMR
+npm run build        # Production build
+npm run build:dev    # Development build
+npm test             # Run test suite
+npm run test:coverage # Test coverage report
+```
 
 ### Browser Compatibility
 - Chrome 60+
