@@ -85,5 +85,72 @@ body{
 
 footer.site-footer{ padding:16px 20px; text-align:center; color:var(--muted); font-size:0.95rem; }
 
+/* Settings Section */
+.settings-section{ margin-bottom: 24px; }
+.settings-toggle{ 
+    background: var(--surface); 
+    border: 2px solid var(--card-border); 
+    padding: 10px 16px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 14px; 
+    font-weight: 600; 
+    color: #374151; 
+    transition: all .2s ease; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+.settings-toggle:hover{ background: #f1f5f9; border-color: var(--brand-1); }
+.settings-toggle[aria-expanded="true"]{ 
+    background: var(--brand-1); 
+    color: white; 
+    border-color: var(--brand-1); 
+}
+
+.settings-panel{ 
+    margin-top: 12px; 
+    background: var(--surface); 
+    border: 2px solid var(--card-border); 
+    border-radius: 12px; 
+    overflow: hidden;
+    animation: slideDown .2s ease;
+}
+@keyframes slideDown{ from{ opacity: 0; transform: translateY(-10px); } to{ opacity: 1; transform: translateY(0); } }
+
+.settings-content{ padding: 20px; }
+.settings-content h3{ margin-bottom: 16px; color: #111827; font-size: 1.1rem; }
+
+.settings-actions{ 
+    display: flex; 
+    gap: 12px; 
+    margin-top: 16px; 
+}
+.btn-secondary{ 
+    background: white; 
+    color: var(--brand-1); 
+    border: 2px solid var(--brand-1); 
+    padding: 8px 16px; 
+    border-radius: 8px; 
+    font-size: 14px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all .15s ease; 
+}
+.btn-secondary:hover{ 
+    background: var(--brand-1); 
+    color: white; 
+}
+
+/* Temporary message animations */
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
 @media (max-width:900px){ .input-grid{ grid-template-columns: 1fr; } .main-content{ padding:20px; } .header h1{ font-size:1.5rem; } .keyword-list{ grid-template-columns:1fr 1fr; } }
-@media (max-width:480px){ .keyword-list{ grid-template-columns:1fr; } .container{ margin:10px; } }
+@media (max-width:480px){ .keyword-list{ grid-template-columns:1fr; } .container{ margin:10px; } .settings-actions{ flex-direction: column; } }

@@ -14,6 +14,26 @@
         </header>
 
         <main class="main-content" role="main">
+            <div class="settings-section">
+                <button type="button" class="settings-toggle" id="settingsToggle" aria-expanded="false" aria-controls="settingsPanel">
+                    ⚙️ Settings
+                </button>
+                <div class="settings-panel" id="settingsPanel" hidden>
+                    <div class="settings-content">
+                        <h3>API Configuration</h3>
+                        <div class="input-group">
+                            <label for="apiKey">OpenAI API Key (optional)</label>
+                            <input type="password" id="apiKey" placeholder="sk-...">
+                            <small class="muted">Your API key is stored locally and never sent to our servers. Leave empty to use the default service.</small>
+                        </div>
+                        <div class="settings-actions">
+                            <button type="button" id="saveSettings" class="btn-secondary">Save Settings</button>
+                            <button type="button" id="clearSettings" class="btn-secondary">Clear Settings</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <section aria-labelledby="form-heading">
                 <h2 id="form-heading" class="sr-only">Generate Keyword Suggestions</h2>
                 <form id="keywordForm">
