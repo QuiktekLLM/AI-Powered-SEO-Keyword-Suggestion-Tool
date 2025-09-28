@@ -1,6 +1,8 @@
 // Main entry point for the application
 import './styles.css';
 import { KeywordUtils } from './keyword-utils.js';
+import { SearchHistoryManager } from './search-history-manager.js';
+import { HistoryPage } from './history-page.js';
 
 // Cache DOM elements for better performance
 let cachedElements = {};
@@ -61,6 +63,9 @@ class SettingsManager {
 }
 
 const settingsManager = new SettingsManager();
+const searchHistoryManager = new SearchHistoryManager();
+let historyPageInstance = null;
+let currentPage = 'main'; // 'main' or 'history'
 
 // Cloudflare Worker endpoint - update this with your deployed worker URL
 const cloudflareEndpoint = 'https://your-worker.your-subdomain.workers.dev/api/generate-keywords';
@@ -226,6 +231,9 @@ function displayResults(data) {
 
   resultsContainer.innerHTML = html;
   resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  
+  // Show results section
+  resultsContainer.hidden = false;
 }
 
 function createKeywordCategory(title, description, keywords) {
@@ -374,10 +382,59 @@ function fillExample(type) {
 window.fillExample = fillExample;
 window.copyKeywordText = copyKeywordText;
 
+// Navigation functions
+function showHistoryPage() {
+  currentPage = 'history';
+  const container = getCachedElement('container') || document.querySelector('.container');
+  
+  // Create history page if it doesn't exist
+  if (!historyPageInstance) {
+    historyPageInstance = new HistoryPage(searchHistoryManager, showMainPage);
+    window.historyPageInstance = historyPageInstance; // Make globally available
+  }
+  
+  // Create history container if it doesn't exist
+  let historyContainer = getCachedElement('historyContainer');
+  if (!historyContainer) {
+    historyContainer = document.createElement('div');
+    historyContainer.id = 'historyContainer';
+    historyContainer.className = 'history-container';
+    container.appendChild(historyContainer);
+  }
+  
+  // Hide main content and show history
+  const mainContent = getCachedElement('mainContent') || document.querySelector('.main-content');
+  if (mainContent) mainContent.style.display = 'none';
+  
+  historyContainer.style.display = 'block';
+  historyContainer.innerHTML = historyPageInstance.render();
+  
+  // Initialize chart if in analytics view
+  if (historyPageInstance.currentView === 'analytics') {
+    setTimeout(() => historyPageInstance.initializeChart(), 100);
+  }
+}
+
+function showMainPage() {
+  currentPage = 'main';
+  const mainContent = getCachedElement('mainContent') || document.querySelector('.main-content');
+  const historyContainer = getCachedElement('historyContainer');
+  
+  if (mainContent) mainContent.style.display = 'block';
+  if (historyContainer) historyContainer.style.display = 'none';
+}
+
+// Make navigation functions globally available
+window.showHistoryPage = showHistoryPage;
+window.showMainPage = showMainPage;
+
 // DOM ready handlers and event delegation
 document.addEventListener('DOMContentLoaded', function () {
   // Initialize settings UI
   initializeSettings();
+  
+  // Initialize history button
+  updateHistoryButton();
   
   const form = getCachedElement('keywordForm');
   if (form) {
@@ -400,7 +457,15 @@ document.addEventListener('DOMContentLoaded', function () {
       
       try {
         const keywords = await generateKeywords(business, industry, location, keywordType);
+        
+        // Save search to history
+        const searchParams = { business, industry, location, keywordType };
+        searchHistoryManager.addSearch(searchParams, keywords);
+        
         displayResults(keywords);
+        
+        // Update history button if it exists
+        updateHistoryButton();
       } catch (err) {
         console.error('Error generating keywords:', err);
         showError('Failed to generate keywords. Please check your connection and try again.');
@@ -459,6 +524,16 @@ function initializeSettings() {
         }
       }
     });
+  }
+}
+
+function updateHistoryButton() {
+  const historyBtn = getCachedElement('historyBtn');
+  if (historyBtn) {
+    const historyCount = searchHistoryManager.getHistory().length;
+    const btnText = historyCount > 0 ? `📊 History (${historyCount})` : '📊 History';
+    historyBtn.textContent = btnText;
+    historyBtn.style.display = historyCount > 0 ? 'inline-block' : 'none';
   }
 }
 
