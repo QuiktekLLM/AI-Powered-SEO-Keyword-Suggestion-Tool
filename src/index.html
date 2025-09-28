@@ -7,13 +7,22 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="container">
         <header class="header" role="banner">
-            <h1>AI-Powered SEO Keyword Tool</h1>
-            <p class="lead">Generate smart keyword suggestions with AI-driven SEO insights</p>
+            <div class="header-content">
+                <div class="header-main">
+                    <h1>AI-Powered SEO Keyword Tool</h1>
+                    <p class="lead">Generate smart keyword suggestions with AI-driven SEO insights</p>
+                </div>
+                <div class="header-actions">
+                    <button type="button" class="history-btn" id="historyBtn" onclick="showHistoryPage()" style="display: none;">
+                        📊 History
+                    </button>
+                </div>
+            </div>
         </header>
 
-        <main class="main-content" role="main">
+        <main class="main-content" role="main" id="mainContent">
             <div class="settings-section">
                 <button type="button" class="settings-toggle" id="settingsToggle" aria-expanded="false" aria-controls="settingsPanel">
                     ⚙️ Settings
